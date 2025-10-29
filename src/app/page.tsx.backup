@@ -1,0 +1,1093 @@
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import * as yup from "yup";
+import AppNavbar from "@/components/common/Navbar";
+
+const schema = yup.object().shape({
+  address: yup.string().required("Property address is required"),
+  bedrooms: yup.string().required("Bedrooms are required"),
+  bathrooms: yup.string().required("Bathrooms are required"),
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required"),
+});
+
+type FormData = yup.InferType<typeof schema>;
+
+export default function HomePage() {
+  return (
+    <div className="homepage">
+      <AppNavbar />
+
+      {/* Hero Section with Banner Background */}
+      <section
+        className="hero-section position-relative"
+        style={{
+          paddingTop: "120px",
+          minHeight: "100vh",
+          background:
+            "linear-gradient(135deg, rgba(44, 162, 72, 0.08) 0%, rgba(44, 162, 72, 0.1) 100%)",
+          overflow: "hidden",
+        }}
+      >
+        {/* Background Vector/Shape */}
+        <div
+          className="position-absolute"
+          style={{
+            top: "0",
+            right: "0",
+            width: "1244px",
+            height: "550px",
+            background: "rgba(44, 162, 72, 0.1)",
+            zIndex: 0,
+          }}
+        ></div>
+
+        <div
+          className="container-fluid p-0 position-relative"
+          style={{ zIndex: 1 }}
+        >
+          <div className="row g-0">
+            <div className="col-lg-6 d-flex align-items-center">
+              <div
+                className="hero-content"
+                style={{ paddingLeft: "140px", paddingRight: "40px" }}
+              >
+                <div
+                  className="badge text-dark mb-4 px-3 py-2 rounded-pill"
+                  style={{
+                    backgroundColor: "#FFB24A",
+                    fontSize: "18px",
+                    fontWeight: "500",
+                    padding: "8px 20px",
+                    borderRadius: "30px",
+                  }}
+                >
+                  Trusted by 1,000+ Landlords
+                </div>
+                <h1
+                  className="display-3 fw-bold text-dark mb-4"
+                  style={{
+                    fontSize: "58px",
+                    lineHeight: "1.2",
+                    color: "#222222",
+                    marginBottom: "60px",
+                    maxWidth: "710px",
+                  }}
+                >
+                  Smarter Rent Pricing in
+                  <br />
+                  60 Seconds
+                </h1>
+                <p
+                  className="lead mb-5"
+                  style={{
+                    fontSize: "24px",
+                    color: "#222222",
+                    lineHeight: "1.5",
+                    maxWidth: "667px",
+                    marginBottom: "60px",
+                  }}
+                >
+                  Instant AI-Powered Rental Reports for Landlords & Investors
+                </p>
+                <Link
+                  href="/generate-report"
+                  className="btn btn-lg px-5 py-3 fw-semibold"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, rgba(19, 63, 113, 1) 0%, rgba(32, 205, 44, 1) 100%)",
+                    border: "none",
+                    color: "white",
+                    fontSize: "22px",
+                    borderRadius: "10px",
+                    padding: "20px 46px",
+                    lineHeight: "1.4",
+                  }}
+                >
+                  Get My Report
+                </Link>
+              </div>
+            </div>
+            <div className="col-lg-6">
+              <div
+                className="hero-image position-relative"
+                style={{
+                  height: "1100px",
+                  marginLeft: "0",
+                  paddingRight: "140px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Image
+                  src="/images/banner-image.png"
+                  alt="Rental Analysis"
+                  width={1627}
+                  height={1100}
+                  className="img-fluid"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    maxHeight: "1100px",
+                    objectFit: "contain",
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Property Analysis Form */}
+        <div className="container position-relative" style={{ zIndex: 2 }}>
+          <div className="row justify-content-center">
+            <div className="col-lg-10">
+              <div
+                className="card shadow-lg border-0 rounded-4"
+                style={{
+                  marginTop: "-50px",
+                  zIndex: 10,
+                  background: "rgba(255, 255, 255, 0.9)",
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid #CECECE",
+                  maxWidth: "1390px",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
+              >
+                <div
+                  className="card-body p-5"
+                  style={{ padding: "40px 30px 50px" }}
+                >
+                  <div className="text-center mb-4">
+                    <h2
+                      className="h1 fw-bold text-dark mb-3"
+                      style={{
+                        fontSize: "38px",
+                        color: "#222222",
+                        maxWidth: "850px",
+                        margin: "0 auto",
+                      }}
+                    >
+                      Get Your Property Analysis
+                    </h2>
+                    <p
+                      className="text-muted"
+                      style={{
+                        fontSize: "20px",
+                        color: "#424242",
+                        maxWidth: "850px",
+                        margin: "0 auto",
+                      }}
+                    >
+                      Enter your property details to receive a comprehensive
+                      rental analysis report
+                    </p>
+                  </div>
+
+                  <div
+                    className="row g-3"
+                    style={{ maxWidth: "1114px", margin: "0 auto" }}
+                  >
+                    {/* Property Address - Full Width */}
+                    <div className="col-12">
+                      <div className="input-group" style={{ height: "70px" }}>
+                        <span
+                          className="input-group-text bg-light border-end-0"
+                          style={{
+                            backgroundColor: "rgba(206, 206, 206, 0.5)",
+                            border: "1px solid #CECECE",
+                            borderRight: "none",
+                            width: "56px",
+                            borderRadius: "6px 0 0 6px",
+                          }}
+                        >
+                          <i className="bi bi-geo-alt text-muted"></i>
+                        </span>
+                        <input
+                          type="text"
+                          className="form-control border-start-0"
+                          placeholder="Property Address"
+                          style={{
+                            border: "1px solid #CECECE",
+                            borderLeft: "none",
+                            borderRadius: "0 6px 6px 0",
+                            height: "70px",
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Bedrooms and Bathrooms - Two Columns */}
+                    <div className="col-md-6">
+                      <div className="input-group" style={{ height: "70px" }}>
+                        <span
+                          className="input-group-text bg-light border-end-0"
+                          style={{
+                            backgroundColor: "rgba(206, 206, 206, 0.5)",
+                            border: "1px solid #CECECE",
+                            borderRight: "none",
+                            width: "56px",
+                            borderRadius: "6px 0 0 6px",
+                          }}
+                        >
+                          <i className="bi bi-door-open text-muted"></i>
+                        </span>
+                        <select
+                          className="form-select border-start-0"
+                          style={{
+                            border: "1px solid #CECECE",
+                            borderLeft: "none",
+                            borderRadius: "0 6px 6px 0",
+                            height: "70px",
+                          }}
+                        >
+                          <option>Select Bedrooms</option>
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4+</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="col-md-6">
+                      <div className="input-group" style={{ height: "70px" }}>
+                        <span
+                          className="input-group-text bg-light border-end-0"
+                          style={{
+                            backgroundColor: "rgba(206, 206, 206, 0.5)",
+                            border: "1px solid #CECECE",
+                            borderRight: "none",
+                            width: "56px",
+                            borderRadius: "6px 0 0 6px",
+                          }}
+                        >
+                          <i className="bi bi-droplet text-muted"></i>
+                        </span>
+                        <select
+                          className="form-select border-start-0"
+                          style={{
+                            border: "1px solid #CECECE",
+                            borderLeft: "none",
+                            borderRadius: "0 6px 6px 0",
+                            height: "70px",
+                          }}
+                        >
+                          <option>Select Bathrooms</option>
+                          <option>1</option>
+                          <option>1.5</option>
+                          <option>2</option>
+                          <option>2.5</option>
+                          <option>3</option>
+                          <option>3.5</option>
+                          <option>4+</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Email Address - Full Width */}
+                    <div className="col-12">
+                      <div className="input-group" style={{ height: "70px" }}>
+                        <span
+                          className="input-group-text bg-light border-end-0"
+                          style={{
+                            backgroundColor: "rgba(206, 206, 206, 0.5)",
+                            border: "1px solid #CECECE",
+                            borderRight: "none",
+                            width: "56px",
+                            borderRadius: "6px 0 0 6px",
+                          }}
+                        >
+                          <i className="bi bi-envelope text-muted"></i>
+                        </span>
+                        <input
+                          type="email"
+                          className="form-control border-start-0"
+                          placeholder="Email Address"
+                          style={{
+                            border: "1px solid #CECECE",
+                            borderLeft: "none",
+                            borderRadius: "0 6px 6px 0",
+                            height: "70px",
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-center mt-4">
+                    <button
+                      className="btn btn-lg px-5 py-3 fw-semibold"
+                      style={{
+                        backgroundColor: "#0D2A4C",
+                        border: "none",
+                        color: "white",
+                        fontSize: "22px",
+                        borderRadius: "10px",
+                        padding: "20px 46px",
+                        lineHeight: "1.4",
+                      }}
+                    >
+                      Generate Analysis Report
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-5" style={{ padding: "150px 140px 100px" }}>
+        <div className="container">
+          <div className="text-center mb-5">
+            <h2
+              className="h1 fw-bold text-dark mb-3"
+              style={{ fontSize: "38px", color: "#222222" }}
+            >
+              How It Works
+            </h2>
+            <p
+              className="lead text-muted"
+              style={{ fontSize: "18px", color: "#424242" }}
+            >
+              Get professional rental market intelligence in three simple steps.
+              Our automated system delivers comprehensive reports within
+              minutes.
+            </p>
+          </div>
+
+          <div className="row g-5 justify-content-center">
+            <div className="col-lg-4 text-center">
+              <div className="step-item">
+                <div
+                  className="step-icon rounded-circle d-inline-flex align-items-center justify-content-center mb-4"
+                  style={{
+                    width: "176px",
+                    height: "188px",
+                    background:
+                      "linear-gradient(135deg, #2CA248 0%, #20CD2C 100%)",
+                  }}
+                >
+                  <Image
+                    src="/images/step1-image.png"
+                    alt="Step 1"
+                    width={120}
+                    height={120}
+                    className="img-fluid"
+                  />
+                </div>
+                <h3
+                  className="h4 fw-bold text-dark mb-3"
+                  style={{ fontSize: "28px", color: "#222222" }}
+                >
+                  Enter Property Info
+                </h3>
+                <p
+                  className="text-muted"
+                  style={{ fontSize: "18px", color: "#424242" }}
+                >
+                  We collect rental comps, market trends, and neighborhood-level
+                  data from trusted sources.
+                </p>
+              </div>
+            </div>
+
+            <div className="col-lg-4 text-center">
+              <div className="step-item">
+                <div
+                  className="step-icon rounded-circle d-inline-flex align-items-center justify-content-center mb-4"
+                  style={{
+                    width: "243px",
+                    height: "200px",
+                    background:
+                      "linear-gradient(135deg, #2CA248 0%, #20CD2C 100%)",
+                  }}
+                >
+                  <Image
+                    src="/images/step2-image.png"
+                    alt="Step 2"
+                    width={120}
+                    height={120}
+                    className="img-fluid"
+                  />
+                </div>
+                <h3
+                  className="h4 fw-bold text-dark mb-3"
+                  style={{ fontSize: "28px", color: "#222222" }}
+                >
+                  Gather Market Data
+                </h3>
+                <p
+                  className="text-muted"
+                  style={{ fontSize: "18px", color: "#424242" }}
+                >
+                  Our AI engine interprets the data, summarizes strategy, and
+                  assembles the report.
+                </p>
+              </div>
+            </div>
+
+            <div className="col-lg-4 text-center">
+              <div className="step-item">
+                <div
+                  className="step-icon rounded-circle d-inline-flex align-items-center justify-content-center mb-4"
+                  style={{
+                    width: "176px",
+                    height: "209px",
+                    background:
+                      "linear-gradient(135deg, #2CA248 0%, #20CD2C 100%)",
+                  }}
+                >
+                  <Image
+                    src="/images/step3-image.png"
+                    alt="Step 3"
+                    width={120}
+                    height={120}
+                    className="img-fluid"
+                  />
+                </div>
+                <h3
+                  className="h4 fw-bold text-dark mb-3"
+                  style={{ fontSize: "28px", color: "#222222" }}
+                >
+                  Receive AI Analysis Report
+                </h3>
+                <p
+                  className="text-muted"
+                  style={{ fontSize: "18px", color: "#424242" }}
+                >
+                  Your investor-analysis PDF report specific to your property is
+                  delivered to your inbox in minutes.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Sample Report Preview */}
+      <section className="py-5 bg-light" style={{ padding: "100px" }}>
+        <div className="container">
+          <div className="text-center mb-5">
+            <h2
+              className="h1 fw-bold text-dark mb-3"
+              style={{ fontSize: "38px", color: "#222222" }}
+            >
+              Sample Report Preview
+            </h2>
+            <p
+              className="lead text-muted"
+              style={{ fontSize: "18px", color: "#424242" }}
+            >
+              See exactly what you'll receive. Preview a blurred snapshot below
+              or view the complete sample report.
+            </p>
+          </div>
+
+          <div className="row align-items-center">
+            <div className="col-lg-6">
+              <div className="sample-report-preview position-relative">
+                <Image
+                  src="/images/sample-report.png"
+                  alt="Sample Report"
+                  width={400}
+                  height={600}
+                  className="img-fluid rounded shadow"
+                  style={{ filter: "blur(3px)" }}
+                />
+                <div className="overlay-content text-center position-absolute top-50 start-50 translate-middle">
+                  <div
+                    className="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                    style={{ width: "84px", height: "84px" }}
+                  >
+                    <i
+                      className="bi bi-eye"
+                      style={{ fontSize: "2rem", color: "#2CA248" }}
+                    ></i>
+                  </div>
+                  <h3
+                    className="h4 fw-bold text-dark mb-2"
+                    style={{ fontSize: "38px", color: "#222222" }}
+                  >
+                    Sample Report Preview
+                  </h3>
+                  <p
+                    className="text-muted mb-4"
+                    style={{ fontSize: "20px", color: "#424242" }}
+                  >
+                    This is a blurred preview. Click below to see the full
+                    sample report.
+                  </p>
+                  <button
+                    className="btn btn-lg px-5 py-3 fw-semibold"
+                    style={{
+                      backgroundColor: "#0D2A4C",
+                      border: "none",
+                      color: "white",
+                      fontSize: "22px",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    View Full Sample
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6">
+              <h3
+                className="h2 fw-bold text-dark mb-4"
+                style={{ fontSize: "28px", color: "#222222" }}
+              >
+                What's Included in Your Report
+              </h3>
+
+              <div className="features-list">
+                {[
+                  {
+                    icon: "bi-geo-alt",
+                    title: "Address-Based Rent Estimate",
+                    description:
+                      "Accurate market rent analysis using property-specific data and local comparables, giving you a clear snapshot of what your rental can earn today.",
+                  },
+                  {
+                    icon: "bi-cpu",
+                    title: "AI-Powered Data Insights",
+                    description:
+                      "Our AI engine analyzes vacancy rates, rent-to-income ratios, and 5-year rent growth trends to deliver a precise and accurate assessment of your property's rental performance and long-term stability.",
+                  },
+                  {
+                    icon: "bi-pie-chart",
+                    title: "Investor Metrics That Matter",
+                    description:
+                      "Cap rates, cash flow projections, and rent-to-value ratios are calculated for your property. These metrics highlight profitability and investment potential compared to local and national benchmarks.",
+                  },
+                  {
+                    icon: "bi-graph-up",
+                    title: "Trend & Formula Analysis",
+                    description:
+                      "We evaluate medium household income shifts, rent growth versus income growth, and historical vacancy cycles. This ensures you see how your property aligns with broader market health and risks.",
+                  },
+                ].map((feature, index) => (
+                  <div
+                    key={index}
+                    className="feature-item d-flex align-items-start mb-4"
+                  >
+                    <div
+                      className="feature-icon rounded d-flex align-items-center justify-content-center me-3"
+                      style={{
+                        width: "68px",
+                        height: "68px",
+                        minWidth: "68px",
+                        backgroundColor: "#2CA248",
+                        boxShadow: "-6px 6px 0px 0px rgba(44, 162, 72, 0.3)",
+                      }}
+                    >
+                      <i
+                        className={`bi ${feature.icon} text-white`}
+                        style={{ fontSize: "24px" }}
+                      ></i>
+                    </div>
+                    <div>
+                      <h4
+                        className="h6 fw-bold text-dark mb-2"
+                        style={{ fontSize: "18px", color: "#222222" }}
+                      >
+                        {feature.title}
+                      </h4>
+                      <p
+                        className="text-muted small mb-0"
+                        style={{
+                          fontSize: "18px",
+                          color: "#424242",
+                          opacity: 0.7,
+                        }}
+                      >
+                        {feature.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div
+                className="card border-2 mt-4"
+                style={{
+                  borderColor:
+                    "linear-gradient(90deg, #2CA248 15%, #54F515 100%)",
+                  background: "white",
+                }}
+              >
+                <div className="card-body text-center p-4">
+                  <h4
+                    className="fw-bold text-dark mb-2"
+                    style={{ fontSize: "22px", color: "#222222" }}
+                  >
+                    Ready to Get Your Report?
+                  </h4>
+                  <p
+                    className="text-muted mb-3"
+                    style={{ fontSize: "18px", color: "#424242" }}
+                  >
+                    Professional rental intelligence delivered in minutes, not
+                    days.
+                  </p>
+                  <button
+                    className="btn btn-lg px-5 py-3 fw-semibold"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, rgba(19, 63, 113, 1) 0%, rgba(32, 205, 44, 1) 100%)",
+                      border: "none",
+                      color: "white",
+                      fontSize: "18px",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    Get My Report
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section
+        className="py-5 position-relative"
+        style={{
+          background: "linear-gradient(135deg, #109445 0%, #2CA248 100%)",
+          padding: "100px 0",
+          overflow: "hidden",
+        }}
+      >
+        {/* Background decorative elements */}
+        <div
+          className="position-absolute"
+          style={{
+            top: "169px",
+            left: "-137px",
+            width: "1118px",
+            height: "1129px",
+            background: "rgba(44, 162, 72, 0.7)",
+            borderRadius: "50%",
+            opacity: 0.08,
+          }}
+        ></div>
+
+        <div className="container position-relative">
+          <div className="row align-items-center">
+            <div className="col-lg-5 text-white">
+              <h2
+                className="h1 fw-bold mb-4"
+                style={{ fontSize: "48px", color: "white" }}
+              >
+                Smarter Rent Pricing Starts Here
+              </h2>
+              <p
+                className="lead mb-4"
+                style={{ fontSize: "22px", color: "white" }}
+              >
+                Get instant, AI-powered rental reports tailored for landlords,
+                investors, and property managers.
+                <br />
+                <br />
+                No guesswork. No waiting. Just clear insights in minutes.
+              </p>
+
+              <ul className="list-unstyled">
+                {[
+                  "Accurate, address-based rent estimates",
+                  "Market trends & comparable properties",
+                  "Neighborhood demographics & investor metrics",
+                ].map((item, index) => (
+                  <li key={index} className="d-flex align-items-center mb-3">
+                    <div
+                      className="rounded-circle d-inline-flex align-items-center justify-content-center me-3"
+                      style={{
+                        width: "24px",
+                        height: "24px",
+                        backgroundColor: "#FFB24A",
+                      }}
+                    >
+                      <i
+                        className="bi bi-check text-dark"
+                        style={{ fontSize: "10px" }}
+                      ></i>
+                    </div>
+                    <span style={{ fontSize: "18px", color: "white" }}>
+                      {item}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="col-lg-7">
+              <div className="row g-3">
+                {[
+                  {
+                    name: "One-Off Report",
+                    price: "$15",
+                    description: "Quick insights when you need them",
+                  },
+                  {
+                    name: "Starter 5-Pack",
+                    price: "$59",
+                    description: "Smart savings for growing portfolios",
+                    popular: true,
+                  },
+                  {
+                    name: "Pro 20-Pack",
+                    price: "$219",
+                    description: "Data power for active investors",
+                  },
+                  {
+                    name: "Agency 50-Pack",
+                    price: "$499",
+                    description: "Scalable solutions for property pros",
+                  },
+                  {
+                    name: "Enterprise 100-Pack",
+                    price: "$849",
+                    description: "Enterprise-level intelligence at scale",
+                  },
+                ].map((plan, index) => (
+                  <div key={index} className="col-md-6 col-lg-4">
+                    <div
+                      className={`card h-100 ${
+                        plan.popular ? "border-warning border-2" : ""
+                      }`}
+                      style={{
+                        borderRadius: "20px",
+                        boxShadow: "0px 8px 24px 0px rgba(56, 65, 64, 0.3)",
+                      }}
+                    >
+                      {plan.popular && (
+                        <div
+                          className="position-absolute top-0 start-50 translate-middle badge px-3 py-2 rounded-pill"
+                          style={{
+                            marginTop: "-15px",
+                            backgroundColor: "#FFB24A",
+                            color: "#0D2A4C",
+                            fontSize: "14px",
+                            fontWeight: "600",
+                          }}
+                        >
+                          <i className="bi bi-star me-2"></i>
+                          Most Popular
+                        </div>
+                      )}
+                      <div className="card-body text-center p-3">
+                        <h5
+                          className="fw-bold text-dark mb-2"
+                          style={{ fontSize: "16px", color: "#222222" }}
+                        >
+                          {plan.name}
+                        </h5>
+                        <div className="price mb-2">
+                          <span
+                            className="h2 fw-bold"
+                            style={{ fontSize: "38px", color: "#2CA248" }}
+                          >
+                            {plan.price}
+                          </span>
+                        </div>
+                        <p
+                          className="text-muted small mb-3"
+                          style={{ fontSize: "16px", color: "#424242" }}
+                        >
+                          {plan.description}
+                        </p>
+                        <button
+                          className={`btn btn-sm w-100 ${
+                            plan.popular ? "btn-primary" : "btn-outline-primary"
+                          }`}
+                          style={{
+                            fontSize: "18px",
+                            fontWeight: "600",
+                            padding: "10px 30px",
+                          }}
+                        >
+                          {plan.popular
+                            ? "Get Starter Pack"
+                            : `Buy ${plan.name}`}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-5" style={{ padding: "100px 140px" }}>
+        <div className="container">
+          <div className="text-center mb-5">
+            <h2
+              className="h1 fw-bold text-dark mb-3"
+              style={{ fontSize: "38px", color: "#222222" }}
+            >
+              Frequently Asked Questions
+            </h2>
+            <p
+              className="lead text-muted"
+              style={{ fontSize: "18px", color: "#424242" }}
+            >
+              Everything you need to know about our rental intelligence reports
+            </p>
+          </div>
+
+          <div className="row justify-content-center">
+            <div className="col-lg-8">
+              <div className="accordion" id="faqAccordion">
+                {[
+                  "How accurate are your rental estimates?",
+                  "How quickly do I receive my report?",
+                  "What areas of analysis does the report cover?",
+                  "What makes YourRentIntel different from other tools?",
+                  "How reliable is the data over time?",
+                ].map((question, index) => (
+                  <div
+                    key={index}
+                    className="accordion-item mb-3"
+                    style={{
+                      border: "1px solid",
+                      borderColor:
+                        "linear-gradient(90deg, #2CA248 15%, #54F515 100%)",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <h2 className="accordion-header">
+                      <button
+                        className="accordion-button collapsed fw-bold"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target={`#faq${index}`}
+                        style={{
+                          fontSize: "18px",
+                          color: "#222222",
+                        }}
+                      >
+                        {question}
+                      </button>
+                    </h2>
+                    <div
+                      id={`faq${index}`}
+                      className="accordion-collapse collapse"
+                      data-bs-parent="#faqAccordion"
+                    >
+                      <div
+                        className="accordion-body text-muted"
+                        style={{ fontSize: "18px", color: "#424242" }}
+                      >
+                        Detailed answer to this frequently asked question will
+                        be provided here.
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer
+        className="bg-dark text-white py-5"
+        style={{ backgroundColor: "#0D2A4C", padding: "100px 140px" }}
+      >
+        <div className="container">
+          <div className="row g-4">
+            <div className="col-lg-4">
+              <Image
+                src="/images/logo.png"
+                alt="RentIntel"
+                width={120}
+                height={60}
+                className="mb-3"
+              />
+              <p
+                className="text-muted"
+                style={{ fontSize: "18px", color: "#CECECE" }}
+              >
+                Your Edge in Rental Intelligence. Professional rental market
+                reports powered by AI and real-time data.
+              </p>
+            </div>
+
+            <div className="col-lg-2">
+              <h6 className="fw-bold mb-3" style={{ color: "white" }}>
+                Product
+              </h6>
+              <ul className="list-unstyled">
+                <li>
+                  <Link
+                    href="/one-time-reports"
+                    className="text-decoration-none"
+                    style={{ color: "#CECECE" }}
+                  >
+                    One-Time Reports
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/purchase-plans"
+                    className="text-decoration-none"
+                    style={{ color: "#CECECE" }}
+                  >
+                    Subscription Plans
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/api-access"
+                    className="text-decoration-none"
+                    style={{ color: "#CECECE" }}
+                  >
+                    API Access
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/sample-report"
+                    className="text-decoration-none"
+                    style={{ color: "#CECECE" }}
+                  >
+                    Sample Reports
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-lg-2">
+              <h6 className="fw-bold mb-3" style={{ color: "white" }}>
+                Company
+              </h6>
+              <ul className="list-unstyled">
+                <li>
+                  <Link
+                    href="/about-us"
+                    className="text-decoration-none"
+                    style={{ color: "#CECECE" }}
+                  >
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/contact"
+                    className="text-decoration-none"
+                    style={{ color: "#CECECE" }}
+                  >
+                    Contact
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/privacy"
+                    className="text-decoration-none"
+                    style={{ color: "#CECECE" }}
+                  >
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/terms"
+                    className="text-decoration-none"
+                    style={{ color: "#CECECE" }}
+                  >
+                    Terms of Service
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-lg-2">
+              <h6 className="fw-bold mb-3" style={{ color: "white" }}>
+                Support
+              </h6>
+              <ul className="list-unstyled">
+                <li>
+                  <Link
+                    href="/help"
+                    className="text-decoration-none"
+                    style={{ color: "#CECECE" }}
+                  >
+                    Help Center
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/faq"
+                    className="text-decoration-none"
+                    style={{ color: "#CECECE" }}
+                  >
+                    FAQ
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/support"
+                    className="text-decoration-none"
+                    style={{ color: "#CECECE" }}
+                  >
+                    Technical Support
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/status"
+                    className="text-decoration-none"
+                    style={{ color: "#CECECE" }}
+                  >
+                    Status Page
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <hr
+            className="my-4"
+            style={{ borderColor: "#CECECE", opacity: 0.5 }}
+          />
+
+          <div className="row align-items-center">
+            <div className="col-md-6">
+              <p
+                className="text-muted mb-0"
+                style={{ fontSize: "16px", color: "#CECECE" }}
+              >
+                © 2025 All Rights Reserved | Powered by YourRentIntel
+              </p>
+            </div>
+            <div className="col-md-6 text-md-end">
+              <div className="social-links">
+                <Link href="#" className="me-3" style={{ color: "#CECECE" }}>
+                  <i className="bi bi-twitter"></i>
+                </Link>
+                <Link href="#" className="me-3" style={{ color: "#CECECE" }}>
+                  <i className="bi bi-facebook"></i>
+                </Link>
+                <Link href="#" style={{ color: "#CECECE" }}>
+                  <i className="bi bi-linkedin"></i>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

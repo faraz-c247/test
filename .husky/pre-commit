@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# get current branch
+local_branch=$(git rev-parse --abbrev-ref HEAD)
+
+# validate branch name using case (POSIX compliant)
+case "$local_branch" in
+  main|dev|husky|prod_v*|opdev_v*|development_v*|feat/*|refactor/*|optm/*|chore/*|fix/*|bugfix/*|hotfix/*|YTR-[0-9]/*)
+    # valid branch, do nothing
+    ;;
+  *)
+    echo ""
+    echo "❌ Invalid branch name: '$local_branch'"
+    echo ""
+    echo "Branch name must follow project rules:"
+    echo "  1. Exact branch names: main, dev, husky, prod_v*, opdev_v*, development_v*"
+    echo "  2. Feature branches: feat/<name>, refactor/<name>, optm/<name>, chore/<name>, fix/<name>, bugfix/<name>, hotfix/<name>, YTR-<id>/<name>"
+    echo ""
+    echo "Examples:"
+    echo "  feat/login-page"
+    echo "  fix/auth-bug"
+    echo "  prod_v1"
+    echo ""
+    exit 1
+    ;;
+esac
+
+# run lint-staged
+yarn lint-staged

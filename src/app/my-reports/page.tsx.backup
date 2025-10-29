@@ -1,0 +1,568 @@
+"use client";
+
+import React, { useState } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Badge,
+  Button,
+  Table,
+  Form,
+  InputGroup,
+  Modal,
+} from "react-bootstrap";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+
+interface PropertyReport {
+  id: string;
+  propertyAddress: string;
+  propertyType: string;
+  reportType: "single" | "pro" | "enterprise";
+  status: "completed" | "processing" | "failed";
+  generatedAt: string;
+  estimatedRent: {
+    min: number;
+    max: number;
+    recommended: number;
+  };
+  confidence: number;
+  reportUrl?: string;
+  downloadUrl?: string;
+}
+
+export default function MyReports() {
+  const { data: session } = useSession();
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [selectedReport, setSelectedReport] = useState<PropertyReport | null>(
+    null
+  );
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
+
+  // Mock data for property reports
+  const mockReports: PropertyReport[] = [
+    {
+      id: "1",
+      propertyAddress: "123 Main Street, Boston, MA 02101",
+      propertyType: "Single Family Home",
+      reportType: "pro",
+      status: "completed",
+      generatedAt: "2024-12-30 14:30",
+      estimatedRent: {
+        min: 2800,
+        max: 3200,
+        recommended: 3000,
+      },
+      confidence: 92,
+      reportUrl: "/reports/1",
+      downloadUrl: "/download/1",
+    },
+    {
+      id: "2",
+      propertyAddress: "456 Oak Avenue, Cambridge, MA 02139",
+      propertyType: "Condo",
+      reportType: "single",
+      status: "completed",
+      generatedAt: "2024-12-28 16:45",
+      estimatedRent: {
+        min: 2200,
+        max: 2600,
+        recommended: 2400,
+      },
+      confidence: 89,
+      reportUrl: "/reports/2",
+      downloadUrl: "/download/2",
+    },
+    {
+      id: "3",
+      propertyAddress: "789 Elm Street, Somerville, MA 02144",
+      propertyType: "Townhouse",
+      reportType: "enterprise",
+      status: "completed",
+      generatedAt: "2024-12-25 11:20",
+      estimatedRent: {
+        min: 3500,
+        max: 4200,
+        recommended: 3800,
+      },
+      confidence: 95,
+      reportUrl: "/reports/3",
+      downloadUrl: "/download/3",
+    },
+    {
+      id: "4",
+      propertyAddress: "321 Pine Road, Brookline, MA 02445",
+      propertyType: "Apartment",
+      reportType: "pro",
+      status: "processing",
+      generatedAt: "2024-12-31 09:15",
+      estimatedRent: {
+        min: 0,
+        max: 0,
+        recommended: 0,
+      },
+      confidence: 0,
+    },
+    {
+      id: "5",
+      propertyAddress: "654 Maple Drive, Newton, MA 02458",
+      propertyType: "Single Family Home",
+      reportType: "single",
+      status: "failed",
+      generatedAt: "2024-12-29 13:00",
+      estimatedRent: {
+        min: 0,
+        max: 0,
+        recommended: 0,
+      },
+      confidence: 0,
+    },
+  ];
+
+  const filteredReports = mockReports.filter((report) => {
+    const matchesSearch =
+      report.propertyAddress.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      report.propertyType.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesStatus =
+      statusFilter === "all" || report.status === statusFilter;
+    const matchesType =
+      typeFilter === "all" || report.reportType === typeFilter;
+
+    return matchesSearch && matchesStatus && matchesType;
+  });
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "completed":
+        return <Badge className="status-badge-active">Completed</Badge>;
+      case "processing":
+        return <Badge className="badge-figma-orange">Processing</Badge>;
+      case "failed":
+        return <Badge className="badge-figma-red">Failed</Badge>;
+      default:
+        return <Badge className="badge-figma-outline">{status}</Badge>;
+    }
+  };
+
+  const getReportTypeBadge = (type: string) => {
+    switch (type) {
+      case "single":
+        return <Badge className="badge-figma-outline">Single</Badge>;
+      case "pro":
+        return <Badge className="badge-figma-orange">Pro</Badge>;
+      case "enterprise":
+        return <Badge className="badge-figma-green">Enterprise</Badge>;
+      default:
+        return <Badge className="badge-figma-outline">{type}</Badge>;
+    }
+  };
+
+  const handleViewReport = (report: PropertyReport) => {
+    setSelectedReport(report);
+    setShowReportModal(true);
+  };
+
+  const handleDownloadReport = (reportId: string) => {
+    // TODO: Implement download functionality
+    console.log("Downloading report:", reportId);
+  };
+
+  const handleRegenerateReport = (reportId: string) => {
+    // TODO: Implement regenerate functionality
+    console.log("Regenerating report:", reportId);
+  };
+
+  const getCompletedReportsCount = () => {
+    return mockReports.filter((report) => report.status === "completed").length;
+  };
+
+  const getTotalReportsCount = () => {
+    return mockReports.length;
+  };
+
+  return (
+    <div className="fade-in">
+      {/* Header Section */}
+      <Row className="mb-4">
+        <Col>
+          <div className="table-container-figma">
+            <div className="table-header-figma">
+              <Row className="align-items-center">
+                <Col>
+                  <h3 className="text-primary-custom mb-1">
+                    📋 My Property Reports
+                  </h3>
+                  <p className="text-secondary-custom mb-0">
+                    View and manage all your generated property analysis
+                    reports.
+                  </p>
+                </Col>
+                <Col xs="auto">
+                  <Button
+                    as={Link}
+                    href="/generate-report"
+                    className="btn-primary-gradient"
+                  >
+                    📊 Generate New Report
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          </div>
+        </Col>
+      </Row>
+
+      {/* Key Metrics */}
+      <Row className="mb-4">
+        <Col lg={3} md={6} className="mb-3">
+          <div className="card-figma h-100 slide-up">
+            <div className="card-figma-header text-center">
+              <div
+                className="icon-figma mx-auto mb-2"
+                style={{ width: "48px", height: "48px" }}
+              >
+                <span style={{ fontSize: "24px", color: "white" }}>📊</span>
+              </div>
+            </div>
+            <div className="p-4 text-center">
+              <h5 className="text-primary-custom fw-bold">Total Reports</h5>
+              <h2 className="text-green mb-2">{getTotalReportsCount()}</h2>
+              <div className="d-flex justify-content-center gap-2">
+                <span className="badge-figma-green">All time</span>
+              </div>
+            </div>
+          </div>
+        </Col>
+
+        <Col lg={3} md={6} className="mb-3">
+          <div className="card-figma h-100 slide-up">
+            <div className="card-figma-header text-center">
+              <div
+                className="icon-figma mx-auto mb-2"
+                style={{ width: "48px", height: "48px" }}
+              >
+                <span style={{ fontSize: "24px", color: "white" }}>✅</span>
+              </div>
+            </div>
+            <div className="p-4 text-center">
+              <h5 className="text-primary-custom fw-bold">Completed</h5>
+              <h2 className="text-green mb-2">{getCompletedReportsCount()}</h2>
+              <div className="d-flex justify-content-center gap-2">
+                <span className="badge-figma-green">Ready to view</span>
+              </div>
+            </div>
+          </div>
+        </Col>
+
+        <Col lg={3} md={6} className="mb-3">
+          <div className="card-figma h-100 slide-up">
+            <div className="card-figma-header text-center">
+              <div
+                className="icon-figma mx-auto mb-2"
+                style={{ width: "48px", height: "48px" }}
+              >
+                <span style={{ fontSize: "24px", color: "white" }}>⏳</span>
+              </div>
+            </div>
+            <div className="p-4 text-center">
+              <h5 className="text-primary-custom fw-bold">Processing</h5>
+              <h2 className="text-orange mb-2">
+                {mockReports.filter((r) => r.status === "processing").length}
+              </h2>
+              <div className="d-flex justify-content-center gap-2">
+                <span className="badge-figma-orange">In progress</span>
+              </div>
+            </div>
+          </div>
+        </Col>
+
+        <Col lg={3} md={6} className="mb-3">
+          <div className="card-figma h-100 slide-up">
+            <div className="card-figma-header text-center">
+              <div
+                className="icon-figma mx-auto mb-2"
+                style={{ width: "48px", height: "48px" }}
+              >
+                <span style={{ fontSize: "24px", color: "white" }}>💳</span>
+              </div>
+            </div>
+            <div className="p-4 text-center">
+              <h5 className="text-primary-custom fw-bold">Credits Used</h5>
+              <h2 className="text-green mb-2">
+                {mockReports.reduce((sum, r) => {
+                  if (r.reportType === "single") return sum + 1;
+                  if (r.reportType === "pro") return sum + 1;
+                  if (r.reportType === "enterprise") return sum + 1;
+                  return sum;
+                }, 0)}
+              </h2>
+              <div className="d-flex justify-content-center gap-2">
+                <span className="badge-figma-green">This month</span>
+              </div>
+            </div>
+          </div>
+        </Col>
+      </Row>
+
+      {/* Filters and Search */}
+      <Row className="mb-4">
+        <Col>
+          <div className="table-container-figma">
+            <div className="table-header-figma">
+              <Row className="align-items-center">
+                <Col>
+                  <h4 className="text-primary-custom mb-0">
+                    🔍 Search & Filters
+                  </h4>
+                </Col>
+              </Row>
+            </div>
+            <div className="p-4">
+              <Row className="g-3">
+                <Col md={6}>
+                  <InputGroup>
+                    <InputGroup.Text>🔍</InputGroup.Text>
+                    <Form.Control
+                      type="text"
+                      placeholder="Search by property address or type..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </InputGroup>
+                </Col>
+                <Col md={2}>
+                  <Form.Select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                  >
+                    <option value="all">All Statuses</option>
+                    <option value="completed">Completed</option>
+                    <option value="processing">Processing</option>
+                    <option value="failed">Failed</option>
+                  </Form.Select>
+                </Col>
+                <Col md={2}>
+                  <Form.Select
+                    value={typeFilter}
+                    onChange={(e) => setTypeFilter(e.target.value)}
+                  >
+                    <option value="all">All Types</option>
+                    <option value="single">Single</option>
+                    <option value="pro">Pro</option>
+                    <option value="enterprise">Enterprise</option>
+                  </Form.Select>
+                </Col>
+                <Col md={2}>
+                  <Button className="btn-outline-gradient w-100">
+                    🔄 Refresh
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          </div>
+        </Col>
+      </Row>
+
+      {/* Reports Table */}
+      <Row>
+        <Col>
+          <div className="table-container-figma">
+            <div className="table-header-figma">
+              <h4 className="text-primary-custom mb-0">📋 All Reports</h4>
+              <p className="text-secondary-custom mb-0 mt-1">
+                Your complete property analysis history
+              </p>
+            </div>
+            <Table className="table-figma mb-0">
+              <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Report Type</th>
+                  <th>Status</th>
+                  <th>Generated</th>
+                  <th>Rent Estimate</th>
+                  <th>Confidence</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredReports.map((report) => (
+                  <tr key={report.id}>
+                    <td>
+                      <div className="fw-medium text-primary-custom">
+                        {report.propertyAddress}
+                      </div>
+                      <small className="text-secondary-custom">
+                        {report.propertyType}
+                      </small>
+                    </td>
+                    <td>{getReportTypeBadge(report.reportType)}</td>
+                    <td>{getStatusBadge(report.status)}</td>
+                    <td>
+                      <div className="text-primary-custom">
+                        {new Date(report.generatedAt).toLocaleDateString()}
+                      </div>
+                      <small className="text-secondary-custom">
+                        {new Date(report.generatedAt).toLocaleTimeString()}
+                      </small>
+                    </td>
+                    <td>
+                      {report.status === "completed" ? (
+                        <div>
+                          <div className="fw-medium text-green">
+                            ${report.estimatedRent.recommended.toLocaleString()}
+                          </div>
+                          <small className="text-secondary-custom">
+                            ${report.estimatedRent.min.toLocaleString()} - $
+                            {report.estimatedRent.max.toLocaleString()}
+                          </small>
+                        </div>
+                      ) : (
+                        <span className="text-muted">—</span>
+                      )}
+                    </td>
+                    <td>
+                      {report.status === "completed" ? (
+                        <div className="d-flex align-items-center">
+                          <div className="me-2">{report.confidence}%</div>
+                          <div
+                            className="bg-green-light rounded-figma-md"
+                            style={{ width: "60px", height: "8px" }}
+                          >
+                            <div
+                              style={{
+                                width: `${report.confidence}%`,
+                                height: "100%",
+                                background: "var(--gradient-primary)",
+                                borderRadius: "4px",
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="text-muted">—</span>
+                      )}
+                    </td>
+                    <td>
+                      <div className="d-flex gap-1">
+                        {report.status === "completed" && (
+                          <>
+                            <Button
+                              size="sm"
+                              className="btn-primary-gradient"
+                              onClick={() => handleViewReport(report)}
+                            >
+                              👁️ View
+                            </Button>
+                            <Button
+                              size="sm"
+                              className="btn-outline-gradient"
+                              onClick={() => handleDownloadReport(report.id)}
+                            >
+                              📥
+                            </Button>
+                          </>
+                        )}
+                        {report.status === "failed" && (
+                          <Button
+                            size="sm"
+                            className="btn-outline-gradient"
+                            onClick={() => handleRegenerateReport(report.id)}
+                          >
+                            🔄 Retry
+                          </Button>
+                        )}
+                        {report.status === "processing" && (
+                          <span className="text-muted">Processing...</span>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+        </Col>
+      </Row>
+
+      {/* Report Detail Modal */}
+      <Modal
+        show={showReportModal}
+        onHide={() => setShowReportModal(false)}
+        size="lg"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Property Report Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedReport && (
+            <div>
+              <Row>
+                <Col md={6}>
+                  <h6>Property Information</h6>
+                  <p>
+                    <strong>Address:</strong> {selectedReport.propertyAddress}
+                  </p>
+                  <p>
+                    <strong>Type:</strong> {selectedReport.propertyType}
+                  </p>
+                  <p>
+                    <strong>Report Type:</strong>{" "}
+                    {getReportTypeBadge(selectedReport.reportType)}
+                  </p>
+                  <p>
+                    <strong>Generated:</strong> {selectedReport.generatedAt}
+                  </p>
+                </Col>
+                <Col md={6}>
+                  <h6>Analysis Results</h6>
+                  <p>
+                    <strong>Status:</strong>{" "}
+                    {getStatusBadge(selectedReport.status)}
+                  </p>
+                  <p>
+                    <strong>Confidence:</strong> {selectedReport.confidence}%
+                  </p>
+                  <p>
+                    <strong>Recommended Rent:</strong> $
+                    {selectedReport.estimatedRent.recommended.toLocaleString()}
+                  </p>
+                  <p>
+                    <strong>Range:</strong> $
+                    {selectedReport.estimatedRent.min.toLocaleString()} - $
+                    {selectedReport.estimatedRent.max.toLocaleString()}
+                  </p>
+                </Col>
+              </Row>
+              <hr />
+              <div className="text-center">
+                <h5 className="text-primary-custom">Report Summary</h5>
+                <p className="text-secondary-custom">
+                  This {selectedReport.reportType} report provides comprehensive
+                  analysis including market trends, comparable properties, and
+                  detailed rental estimates for {selectedReport.propertyAddress}
+                  .
+                </p>
+              </div>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowReportModal(false)}>
+            Close
+          </Button>
+          {selectedReport?.downloadUrl && (
+            <Button className="btn-primary-gradient">
+              📥 Download Full Report
+            </Button>
+          )}
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
+}
